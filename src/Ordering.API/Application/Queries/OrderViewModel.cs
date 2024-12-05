@@ -21,6 +21,8 @@ public record Order
     public string Country { get; init; }
     public List<Orderitem> OrderItems { get; set; }
     public decimal Total { get; set; }
+    public decimal SalesTax { get; set; }       //TEG added
+    public decimal GrandTotal { get; set; }     //TEG added
 }
 
 public record OrderSummary

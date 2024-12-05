@@ -106,6 +106,30 @@ public class OrderAggregateTest
     }
 
     [TestMethod]
+    public void check_sales_tax_with_two_items()
+    {
+        var address = new AddressBuilder().Build();
+        var order = new OrderBuilder(address)
+            .AddOne(1, "cup", 10.0m, 0, string.Empty)
+            .AddOne(1, "cup", 10.0m, 0, string.Empty)
+            .Build();
+
+        Assert.AreEqual(1.3m, order.GetSalesTax());
+    }
+
+    [TestMethod]
+    public void check_grand_total_with_two_items()
+    {
+        var address = new AddressBuilder().Build();
+        var order = new OrderBuilder(address)
+            .AddOne(1, "cup", 10.0m, 0, string.Empty)
+            .AddOne(1, "cup", 10.0m, 0, string.Empty)
+            .Build();
+
+        Assert.AreEqual(21.3m, order.GetGrandTotal());
+    }
+
+    [TestMethod]
     public void Add_new_Order_raises_new_event()
     {
         //Arrange
