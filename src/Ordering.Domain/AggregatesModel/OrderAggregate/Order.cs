@@ -183,4 +183,21 @@ public class Order
     }
 
     public decimal GetTotal() => _orderItems.Sum(o => o.Units * o.UnitPrice);
+
+    // TEG Added
+    public decimal GetSalesTax()
+    {
+        decimal total = GetTotal();
+        decimal taxRate = 0.065M;        // tax is 6.5%
+        decimal tax = total * taxRate;
+        return tax;
+    }
+    // TEG Added
+    public decimal GetGrandTotal()
+    {
+        decimal total = GetTotal();
+        decimal tax = GetSalesTax();
+        decimal grandTotal = total + tax;
+        return grandTotal;
+    }
 }

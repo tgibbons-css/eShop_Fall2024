@@ -1,5 +1,6 @@
 ﻿namespace eShop.Basket.API.Model;
 
+// test comment
 public class BasketItem : IValidatableObject
 {
     public string Id { get; set; }
