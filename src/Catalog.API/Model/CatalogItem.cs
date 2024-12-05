@@ -15,6 +15,8 @@ public class CatalogItem
 
     public decimal Price { get; set; }
 
+    public string Gender { get; set; }  //TEG added
+
     public string PictureFileName { get; set; }
 
     public int CatalogTypeId { get; set; }
