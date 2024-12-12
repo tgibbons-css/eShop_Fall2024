@@ -1,7 +1,7 @@
 ﻿@inject CatalogService CatalogService
 @inject NavigationManager Nav
 
-@if (catalogBrands is not null && catalogItemTypes is not null)
+@if (catalogBrands is not null && catalogItemTypes is not null && catalogPriceRanges is not null)
 {
     <div class="catalog-search">
         <div class="catalog-search-header">
@@ -31,13 +31,29 @@
                 <div class="catalog-search-group-tags">
                     <a href="@TypeUri(null)"
                     class="catalog-search-tag @(ItemTypeId == null ? "active " : "")">
-                    All
+                        All
                     </a>
                     @foreach (var itemType in catalogItemTypes)
                     {
                         <a href="@TypeUri(itemType.Id)"
                         class="catalog-search-tag @(ItemTypeId == itemType.Id ? "active " : "")">
                             @itemType.Type
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="catalog-search-group">
+                <h3>Price</h3>
+                <div class="catalog-search-group-tags">
+                    <a href="@PriceUri(null)"
+                    class="catalog-search-tag @(PriceId == null ? "active " : "")">
+                        All
+                    </a>
+                    @foreach (var price in catalogPriceRanges)
+                    {
+                        <a href="@PriceUri(price.Id)"
+                           class="catalog-search-tag @(PriceId == price.Id ? "active " : "")">
+                            @price.PriceString
                         </a>
                     }
                 </div>
@@ -49,8 +65,11 @@
 @code {
     IEnumerable<CatalogBrand>? catalogBrands;
     IEnumerable<CatalogItemType>? catalogItemTypes;
+    List<PriceRange>? catalogPriceRanges;
     [Parameter] public int? BrandId { get; set; }
     [Parameter] public int? ItemTypeId { get; set; }
+    [Parameter] public int? PriceId { get; set; }     // TEG Added
+    public record PriceRange(int Id, string PriceString);
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,12 +78,27 @@
         await Task.WhenAll(brandsTask, itemTypesTask);
         catalogBrands = brandsTask.Result;
         catalogItemTypes = itemTypesTask.Result;
+        //catalogPriceRanges = ["$0-$50", "50-150", "$150-500", "$500+"];
+        catalogPriceRanges = new List<PriceRange>
+        {
+            new PriceRange(1, "$0-$50"),
+            new PriceRange(2, "$50-$150"),
+            new PriceRange(3, "$150-$500"),
+            new PriceRange(4, "$500+")
+        };
     }
 
     private string BrandUri(int? brandId) => Nav.GetUriWithQueryParameters(new Dictionary<string, object?>()
     {
         { "page", null },
         { "brand", brandId },
+    });
+
+    // TEG added
+    private string PriceUri(int? priceId) => Nav.GetUriWithQueryParameters(new Dictionary<string, object?>()
+    {
+        { "page", null },
+        { "price", priceId },
     });
 
     private string TypeUri(int? typeId) => Nav.GetUriWithQueryParameters(new Dictionary<string, object?>()
